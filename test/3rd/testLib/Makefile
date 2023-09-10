@@ -1,0 +1,28 @@
+VERSION   =
+CC        =gcc
+DEBUG     =
+CFLAGS    =
+LFLAGS	  =-fPIC -shared 
+SOURCES   =$(wildcard ./3rd/testLib/*.cpp)
+INCLUDES  =-I./inc/3rd/testLib
+LIB_NAMES =
+LIB_PATH  =
+OBJ       =$(patsubst %.cpp, %.o, $(SOURCES))
+TARGET    =libtestLib.so
+ 
+#link
+$(TARGET):$(OBJ)
+	@mkdir -p Lib_output
+	$(CC) $(OBJ) $(LIB_PATH) $(LIB_NAMES) $(LFLAGS) -o Lib_output/$(TARGET)
+	@cp -f LIB_output/$(TARGET) ./lib/3rd/testLib
+	@rm -rf $(OBJ)
+	
+#compile
+%.o: %.cpp
+	$(CC) $(INCLUDES) $(DEBUG) -c $(CFLAGS) $< -o $@
+ 
+.PHONY:clean
+clean:
+	@echo "Remove linked and compiled files......"
+	rm -rf ./lib/3rd/testLib/$(TARGET)
+	rm -rf $(OBJ) $(TARGET) Lib_output 
